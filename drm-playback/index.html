@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>Demo Chromecast Receiver App</title>
+    <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"> </script>
+    <!-- Cast Debug Logger -->
+    <script src="//www.gstatic.com/cast/sdk/libs/devtools/debug_layer/caf_receiver_logger.js"></script>
+
+    <!-- SampleReceiver -->
+    <script type="text/javascript" src="dist/bundle.js"></script>
+</head>
+<body>
+<cast-media-player></cast-media-player>
+<script>
+
+    // Create new sample Receiver.
+    const receiver = new THEOdemo.SampleReceiver();
+
+    // Start receiving requests from senders.
+    receiver.start();
+
+</script>
+</body>
+</html>

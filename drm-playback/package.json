@@ -1,0 +1,26 @@
+{
+  "name": "samples-chromecast-receiver",
+  "version": "1.0.0",
+  "description": "A chromecast receiver demo application which can play drm content.",
+  "author": "THEO Technologies NV",
+  "scripts": {
+    "build": "rollup -c ./rollup.config.js",
+    "eslint": "eslint 'src/**/*.ts'"
+  },
+  "dependencies": {
+    "@types/chromecast-caf-receiver": "^6.0.6"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-typescript": "^5.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "rollup": "^2.26.9",
+    "tslib": "^2.0.1",
+    "typescript": "^4.3.5"
+  }
+}
