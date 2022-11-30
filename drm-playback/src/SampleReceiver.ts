@@ -8,9 +8,9 @@ import {
 import { EventType, MediaElementEvent, ErrorEvent } from "chromecast-caf-receiver/cast.framework.events";
 import { ContentProtectionConfigEnricher } from "./drm/ContentProtectionConfigEnricher";
 import { DrmConfiguration } from "./source/DrmConfiguration";
-import { VudrmWidevineConfigEnricher } from "./drm/VudrmWidevineConfigEnricher";
+import { VudrmWidevineConfigEnricher } from "./drm/vudrm/VudrmWidevineConfigEnricher";
 import { WidevineConfigEnricher } from "./drm/WidevineConfigEnricher";
-import { VudrmConfiguration } from "./drm/VudrmConfiguration";
+import { VudrmConfiguration } from "./drm/vudrm/VudrmConfiguration";
 import { Source, SourceDescription } from "./source/SourceDescription";
 import { CastDebugLogger } from "chromecast-caf-receiver/cast.debug";
 

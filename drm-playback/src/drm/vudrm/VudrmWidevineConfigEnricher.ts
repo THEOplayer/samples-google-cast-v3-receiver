@@ -1,7 +1,7 @@
 import { NetworkRequestInfo } from "chromecast-caf-receiver/cast.framework";
-import { fromUint8ArrayToNumberArray } from "../utils/TypeUtils";
-import { WidevineConfigEnricher } from "./WidevineConfigEnricher";
-import { WidevineKeySystemConfiguration } from "../source/DrmConfiguration";
+import { fromUint8ArrayToNumberArray } from "../../utils/TypeUtils";
+import { WidevineConfigEnricher } from "../WidevineConfigEnricher";
+import { WidevineKeySystemConfiguration } from "../../source/DrmConfiguration";
 import { VudrmConfiguration } from "./VudrmConfiguration";
 
 export class VudrmWidevineConfigEnricher extends WidevineConfigEnricher {
