@@ -77,12 +77,12 @@ export class SampleReceiver {
             }
 
             // Set an optional manifest request handler
-            playbackConfig.manifestRequestHandler = ((request: framework.NetworkRequestInfo) => {
+            playbackConfig.manifestRequestHandler = ((_request: framework.NetworkRequestInfo) => {
                 // request.url = `<proxy>${request.url}`;
             });
 
             // Set an optional segment request handler
-            playbackConfig.segmentRequestHandler = ((request: framework.NetworkRequestInfo) => {
+            playbackConfig.segmentRequestHandler = ((_request: framework.NetworkRequestInfo) => {
                 // request.url = `<proxy>${request.url}`;
             });
 

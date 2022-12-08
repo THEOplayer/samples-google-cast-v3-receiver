@@ -5,7 +5,7 @@
  * https://docs.theoplayer.com/api-reference/web/theoplayer.drmconfiguration.md/#drmconfiguration-interface
  */
 
-export type DrmIntegrationId = 'vudrm' | 'ezdrm';
+export type DrmIntegrationId = 'vudrm' | 'ezdrm' | 'titaniumdrm';
 
 /**
  * Describes the key system configuration.
@@ -121,6 +121,11 @@ export interface DrmConfiguration {
     integration?: DrmIntegrationId;
 
     /**
+     * The identifier of a custom DRM integration.
+     */
+    customIntegrationId?: string;
+
+    /**
      * The configuration of the Widevine key system.
      */
     widevine?: WidevineKeySystemConfiguration;
@@ -129,4 +134,9 @@ export interface DrmConfiguration {
      * The configuration of the ClearKey key system.
      */
     clearkey?: ClearkeyKeySystemConfiguration;
+
+    /**
+     * An object of key/value pairs which can be used to pass in specific parameters.
+     */
+    integrationParameters?: { [parameterName: string]: any };
 }

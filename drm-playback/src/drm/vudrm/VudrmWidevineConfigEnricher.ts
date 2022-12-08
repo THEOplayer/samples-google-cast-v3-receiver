@@ -1,11 +1,11 @@
 import { NetworkRequestInfo } from "chromecast-caf-receiver/cast.framework";
 import { fromUint8ArrayToNumberArray } from "../../utils/TypeUtils";
 import { WidevineConfigEnricher } from "../WidevineConfigEnricher";
-import { WidevineKeySystemConfiguration } from "../../source/DrmConfiguration";
+import { DrmConfiguration } from "../../source/DrmConfiguration";
 import { VudrmConfiguration } from "./VudrmConfiguration";
 
 export class VudrmWidevineConfigEnricher extends WidevineConfigEnricher {
-    constructor(widevineContentProtection: WidevineKeySystemConfiguration,
+    constructor(widevineContentProtection: DrmConfiguration,
                 private readonly _vuDrmConfiguration: VudrmConfiguration) {
         super(widevineContentProtection, 'https://widevine-proxy.drm.technology/proxy');
     }
