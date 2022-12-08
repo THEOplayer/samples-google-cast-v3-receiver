@@ -13,6 +13,9 @@ import { WidevineConfigEnricher } from "./drm/WidevineConfigEnricher";
 import { VudrmConfiguration } from "./drm/vudrm/VudrmConfiguration";
 import { Source, SourceDescription } from "./source/SourceDescription";
 import { CastDebugLogger } from "chromecast-caf-receiver/cast.debug";
+import { TitaniumDrmWidevineConfigEnricher } from "./drm/titanium/TitaniumDrmWidevineConfigEnricher";
+import { TitaniumDrmConfiguration } from "./drm/titanium/TitaniumDrmConfiguration";
+import { framework } from "chromecast-caf-receiver";
 
 const LOG_RECEIVER_TAG = 'SampleReceiver';
 
@@ -117,12 +120,14 @@ function integrationId(configuration: DrmConfiguration): string | undefined {
 export function createContentProtectionConfigEnricher(contentProtection: DrmConfiguration): ContentProtectionConfigEnricher | undefined {
     // Widevine DRM
     if (contentProtection.widevine) {
-        switch (contentProtection.integration) {
+        switch (integrationId(contentProtection)) {
             case 'vudrm':
-                return new VudrmWidevineConfigEnricher(contentProtection.widevine, contentProtection as VudrmConfiguration);
+                return new VudrmWidevineConfigEnricher(contentProtection, contentProtection as VudrmConfiguration);
+            case 'titaniumdrm':
+                return new TitaniumDrmWidevineConfigEnricher(contentProtection, contentProtection as TitaniumDrmConfiguration);
             case 'ezdrm':
             default:
-                return new WidevineConfigEnricher(contentProtection.widevine);
+                return new WidevineConfigEnricher(contentProtection);
         }
     }
     return undefined;
