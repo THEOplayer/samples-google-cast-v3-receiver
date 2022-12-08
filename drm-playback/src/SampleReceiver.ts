@@ -76,6 +76,16 @@ export class SampleReceiver {
                 createContentProtectionConfigEnricher(contentProtection)?.enrich(playbackConfig);
             }
 
+            // Set an optional manifest request handler
+            playbackConfig.manifestRequestHandler = ((request: framework.NetworkRequestInfo) => {
+                // request.url = `<proxy>${request.url}`;
+            });
+
+            // Set an optional segment request handler
+            playbackConfig.segmentRequestHandler = ((request: framework.NetworkRequestInfo) => {
+                // request.url = `<proxy>${request.url}`;
+            });
+
             this._playerManager.setPlaybackConfig(playbackConfig);
         }
 
