@@ -70,7 +70,7 @@ export class SampleReceiver {
             const playbackConfig = Object.assign(new PlaybackConfig(), this._playerManager.getPlaybackConfig());
 
             // Check for contentProtection (DRM)
-            const contentProtection = selectedSource.contentProtection;
+            const contentProtection = selectedSource.contentProtection ?? selectedSource.drm;
             if (contentProtection) {
                 // Enrich playbackConfig with contentProtection properties.
                 createContentProtectionConfigEnricher(contentProtection)?.enrich(playbackConfig);
@@ -103,6 +103,14 @@ export class SampleReceiver {
     private readonly handleErrorEvent_ = (event: ErrorEvent): void => {
         this._castDebugLogger.error(LOG_RECEIVER_TAG, 'Detailed Error Code - ' + event.detailedErrorCode);
     };
+}
+
+function integrationId(configuration: DrmConfiguration): string | undefined {
+    const { integration, customIntegrationId } = configuration;
+    if (integration && integration.toLowerCase() === 'custom') {
+        return customIntegrationId;
+    }
+    return integration;
 }
 
 // Create an enricher to apply the contentProtection properties to a playbackConfig instance.
