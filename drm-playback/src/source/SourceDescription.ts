@@ -33,4 +33,11 @@ export interface Source {
      * The content protection parameters for the media resource.
      */
     contentProtection: DrmConfiguration | undefined;
+
+    /**
+     * The content protection parameters for the media resource.
+     *
+     * @deprecated Superseded by {@link contentProtection}.
+     */
+    drm: DrmConfiguration | undefined;
 }

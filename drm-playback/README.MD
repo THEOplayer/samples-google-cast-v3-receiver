@@ -94,10 +94,11 @@ For a full overview of the `SourceDescription` interface we refer to the
 In case the content is DRM protected, the `contentProtection` field of the source description contains an instance of
 [`DRMConfiguration`](https://docs.theoplayer.com/api-reference/web/theoplayer.drmconfiguration.md/#drmconfiguration-interface).
 The `integration` value tells the player what the expected format of the license request and response are. 
-In the sample receiver app we demonstrate just these two Widevine integrations:
+In the sample receiver app we demonstrate just these Widevine integrations:
 
 - "_ezdrm_": as the name implies, the EZDRM integration passes license requests and responses without modification.
 - "_vudrm_": the Vualto VuDRM integration wraps the license request with extra token and keyId properties.
+- "_titaniumdrm_": Arris Titanium DRM adds an authorization header with either a token or a base64-encoded set of device parameters..
 
 Details on these and other DRM integrations, along with comprehensive samples, can be found in the
 [THEOplayer DRM integrations](https://github.com/THEOplayer/samples-drm-integration) project.

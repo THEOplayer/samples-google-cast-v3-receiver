@@ -8,11 +8,14 @@ import {
 import { EventType, MediaElementEvent, ErrorEvent } from "chromecast-caf-receiver/cast.framework.events";
 import { ContentProtectionConfigEnricher } from "./drm/ContentProtectionConfigEnricher";
 import { DrmConfiguration } from "./source/DrmConfiguration";
-import { VudrmWidevineConfigEnricher } from "./drm/VudrmWidevineConfigEnricher";
+import { VudrmWidevineConfigEnricher } from "./drm/vudrm/VudrmWidevineConfigEnricher";
 import { WidevineConfigEnricher } from "./drm/WidevineConfigEnricher";
-import { VudrmConfiguration } from "./drm/VudrmConfiguration";
+import { VudrmConfiguration } from "./drm/vudrm/VudrmConfiguration";
 import { Source, SourceDescription } from "./source/SourceDescription";
 import { CastDebugLogger } from "chromecast-caf-receiver/cast.debug";
+import { TitaniumDrmWidevineConfigEnricher } from "./drm/titanium/TitaniumDrmWidevineConfigEnricher";
+import { TitaniumDrmConfiguration } from "./drm/titanium/TitaniumDrmConfiguration";
+import { framework } from "chromecast-caf-receiver";
 
 const LOG_RECEIVER_TAG = 'SampleReceiver';
 
@@ -70,11 +73,21 @@ export class SampleReceiver {
             const playbackConfig = Object.assign(new PlaybackConfig(), this._playerManager.getPlaybackConfig());
 
             // Check for contentProtection (DRM)
-            const contentProtection = selectedSource.contentProtection;
+            const contentProtection = selectedSource.contentProtection ?? selectedSource.drm;
             if (contentProtection) {
                 // Enrich playbackConfig with contentProtection properties.
                 createContentProtectionConfigEnricher(contentProtection)?.enrich(playbackConfig);
             }
+
+            // Set an optional manifest request handler
+            playbackConfig.manifestRequestHandler = ((_request: framework.NetworkRequestInfo) => {
+                // request.url = `<proxy>${request.url}`;
+            });
+
+            // Set an optional segment request handler
+            playbackConfig.segmentRequestHandler = ((_request: framework.NetworkRequestInfo) => {
+                // request.url = `<proxy>${request.url}`;
+            });
 
             this._playerManager.setPlaybackConfig(playbackConfig);
         }
@@ -95,16 +108,26 @@ export class SampleReceiver {
     };
 }
 
+function integrationId(configuration: DrmConfiguration): string | undefined {
+    const { integration, customIntegrationId } = configuration;
+    if (integration && integration.toLowerCase() === 'custom') {
+        return customIntegrationId;
+    }
+    return integration;
+}
+
 // Create an enricher to apply the contentProtection properties to a playbackConfig instance.
 export function createContentProtectionConfigEnricher(contentProtection: DrmConfiguration): ContentProtectionConfigEnricher | undefined {
     // Widevine DRM
     if (contentProtection.widevine) {
-        switch (contentProtection.integration) {
+        switch (integrationId(contentProtection)) {
             case 'vudrm':
-                return new VudrmWidevineConfigEnricher(contentProtection.widevine, contentProtection as VudrmConfiguration);
+                return new VudrmWidevineConfigEnricher(contentProtection, contentProtection as VudrmConfiguration);
+            case 'titaniumdrm':
+                return new TitaniumDrmWidevineConfigEnricher(contentProtection, contentProtection as TitaniumDrmConfiguration);
             case 'ezdrm':
             default:
-                return new WidevineConfigEnricher(contentProtection.widevine);
+                return new WidevineConfigEnricher(contentProtection);
         }
     }
     return undefined;
