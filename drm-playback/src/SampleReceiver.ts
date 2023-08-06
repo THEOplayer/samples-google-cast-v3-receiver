@@ -65,7 +65,7 @@ export class SampleReceiver {
         }
 
         // Check for sourceDescription
-        const sourceDescription: SourceDescription = loadRequestData?.customData?.sourceDescription;
+        const sourceDescription: SourceDescription = loadRequestData?.customData;
         const selectedSource = sourceDescription?.sources?.find((source: Source) => {
             return source.src === loadRequestData.media.contentId || source.src === loadRequestData.media.contentUrl;
         });
