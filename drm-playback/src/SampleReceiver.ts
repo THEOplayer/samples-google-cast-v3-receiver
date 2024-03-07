@@ -26,6 +26,11 @@ export class SampleReceiver {
 
     constructor() {
         this._context = CastReceiverContext.getInstance();
+
+        this._context.addEventListener(cast.framework.system.EventType.SENDER_DISCONNECTED, (event) => {
+            console.log('SENDER DISCONNECTED', event)
+            this._context.stop()
+        })
         this._playerManager = this._context.getPlayerManager();
 
         this._castDebugLogger = CastDebugLogger.getInstance();
