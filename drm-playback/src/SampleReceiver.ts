@@ -1,4 +1,5 @@
 import { CastReceiverContext, PlaybackConfig, PlayerManager } from "chromecast-caf-receiver/cast.framework";
+import { HlsSegmentFormat, HlsVideoSegmentFormat } from 'chromecast-caf-receiver/cast.framework.messages'
 import {
     ErrorData,
     ErrorReason,
@@ -71,6 +72,15 @@ export class SampleReceiver {
 
         // Check for sourceDescription
         const sourceDescription: SourceDescription = loadRequestData?.customData?.sourceDescription;
+        const { segmentFormat } = loadRequestData?.media?.metadata as any
+
+        if (segmentFormat && segmentFormat == 'fmp4') {
+            // Specify segment format for an HLS stream playing CMAF packaged content.
+            loadRequestData.media.contentType = 'application/x-mpegurl';
+            loadRequestData.media.hlsSegmentFormat = HlsSegmentFormat.FMP4;
+            loadRequestData.media.hlsVideoSegmentFormat = HlsVideoSegmentFormat.FMP4;
+        }
+
         const selectedSource = sourceDescription?.sources?.find((source: Source) => {
             return source.src === loadRequestData.media.contentId || source.src === loadRequestData.media.contentUrl;
         });
