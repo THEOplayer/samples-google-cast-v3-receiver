@@ -4,6 +4,8 @@ import {
     ErrorReason,
     ErrorType, LoadRequestData,
     MessageType,
+    Track,
+    TrackType,
 } from "chromecast-caf-receiver/cast.framework.messages";
 import { EventType, MediaElementEvent, ErrorEvent } from "chromecast-caf-receiver/cast.framework.events";
 import { ContentProtectionConfigEnricher } from "./drm/ContentProtectionConfigEnricher";
@@ -53,6 +55,34 @@ export class SampleReceiver {
 
     // Start receiving requests from senders.
     public start() {
+        this._playerManager.addEventListener(
+            cast.framework.events.EventType.PLAYER_LOAD_COMPLETE, () => {      
+                const currentItem = this._playerManager.getQueueManager()?.getCurrentItem()
+                if (!currentItem) return
+
+                // @ts-ignore
+                const theoTextTracks = currentItem?.customData?.sourceDescription?.textTracks
+                if (!theoTextTracks) return
+                console.log('Found THEOplayer SourceDescription.textTracks');  
+
+                const textTracksManager = this._playerManager.getTextTracksManager()
+                let trackCount = this._playerManager.getMediaInformation()?.tracks?.length ?? 1;
+                for(const textTrack of theoTextTracks) {
+                    if (textTrack.kind != "subtitles") continue;
+                    const sideLoadedTrack = new Track(++trackCount, TrackType.TEXT)
+                    sideLoadedTrack.isInband = false
+                    sideLoadedTrack.trackContentType = "text/vtt" // Assuming only VTT sideloaded texttracks are added
+                    sideLoadedTrack.language = textTrack.srclang
+                    sideLoadedTrack.name = textTrack.label
+                    sideLoadedTrack.trackContentId = textTrack.src
+                    textTracksManager.addTracks([sideLoadedTrack])
+                    const tracks = textTracksManager.getTracks();
+                    console.log('Resulting text tracks',tracks)
+                }
+                    
+                // Enable the English track (if any) by default (assuming srclang in the TextTrackDescription was `en`)
+                textTracksManager.setActiveByLanguage("en");
+            });
         this._context.start();
     }
 
