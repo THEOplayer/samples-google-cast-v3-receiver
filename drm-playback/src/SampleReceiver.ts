@@ -52,7 +52,10 @@ export class SampleReceiver {
 
     // Start receiving requests from senders.
     public start() {
-        this._context.start();
+        let castReceiverOptions = new cast.framework.CastReceiverOptions();
+        castReceiverOptions.useShakaForHls = true;
+        console.log('starting with shaka')
+        this._context.start(castReceiverOptions);
     }
 
     // Setup playbackConfig with a sourceDescription license information passed by loadRequestData.
@@ -65,7 +68,7 @@ export class SampleReceiver {
         }
 
         // Check for sourceDescription
-        const sourceDescription: SourceDescription = loadRequestData?.customData?.sourceDescription;
+        const sourceDescription: SourceDescription = (loadRequestData?.customData as any)?.sourceDescription;
         const selectedSource = sourceDescription?.sources?.find((source: Source) => {
             return source.src === loadRequestData.media.contentId || source.src === loadRequestData.media.contentUrl;
         });
